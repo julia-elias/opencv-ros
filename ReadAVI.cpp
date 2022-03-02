@@ -5,16 +5,24 @@ ReadAVI::ReadAVI(std::string filename, ColorFilter &cf) :
     _cf(cf), _cap(filename) {}
 
 void ReadAVI::processFile() {
+    cv::namedWindow("colors");
     getNextFrame();
     while(!nextFrameEmpty()) {
         _cf.processImage(_frame);
+        cv::waitKey(200);        
         getNextFrame();
+        
     }
 }
 
 void ReadAVI::getNextFrame() {
+    _cap >> _frame;
 }
 
 bool ReadAVI::nextFrameEmpty() {
-    return true;
+    if (_frame.empty()) {
+        return true;
+    } else {
+        return false;
+    }
 }
