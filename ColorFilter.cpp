@@ -9,9 +9,9 @@ void ColorFilter::processImage(cv::Mat img) {
     split();
     
     findBlue();
-    //findGreen();
-    //findRed();
-    //findBGR();
+    findGreen();
+    findRed();
+    findBGR();
     showResult();
 }
 
@@ -33,19 +33,26 @@ void ColorFilter::showResult() {
    // PROBLEM 2: G
    // imshow("colors", _chans[0]);
 
-   // imshow("colors", _frame);
+   // PROBLEM 3: Blue Subtraction
+   //imshow("colors", _blueMask);
+   
+   
+   // PROBLEM 3: Green Subtraction
+   //imshow("colors", _greenMask);
 
-   // imshow("colors", _frame);
-   imshow("colors", _blueMask);
 
+   // PROBLEM 3: Red Subtraction
+   //imshow("colors", _redMask);
 
+    // PROBLEM 6: ALL THREE
+    imshow("colors", _totalColors);
 
 
 }
 
 void ColorFilter::findBlue() {
     Mat bMinusR;
-    subtract(_chans[1], _chans[2], bMinusR);
+    subtract(_chans[0], _chans[2], bMinusR);
 
     Mat thresh;
     threshold(bMinusR, thresh, 50, 255, cv::THRESH_BINARY);
@@ -73,7 +80,7 @@ void ColorFilter::findBlue() {
     
     cv::Mat blueCupImg;
     _frame.copyTo(blueCupImg, contourmask);
-    blueCupImg.copyTo(_blueMask);
+    _blueMask = blueCupImg;
 }
 
 void ColorFilter::findGreen() {
@@ -147,8 +154,8 @@ void ColorFilter::findRed() {
 }
 
 void ColorFilter::findBGR() {
-
-
-
-
+    Mat BGRMask;
+    cv:: bitwise_or(_greenMask, _blueMask, BGRMask);
+    cv:: bitwise_or(_redMask, BGRMask, BGRMask);
+    _totalColors = BGRMask;
 }

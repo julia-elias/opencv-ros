@@ -13,11 +13,11 @@ protected:
     cv::Mat _redMask;
     cv::Mat _greenMask;
     cv::Mat _blueMask;
+    cv::Mat _totalColors;
 public:
     void processImage(cv::Mat img);
 
     void split();
-
     void findBlue();
     void findGreen();
     void findRed();
